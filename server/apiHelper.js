@@ -12,6 +12,23 @@ export const smsTemplates = {
   },
 };
 
+export function resolveSmsMessage(payload) {
+  const directMessage = typeof payload?.body === "string" ? payload.body.trim() : "";
+
+  if (directMessage) {
+    return directMessage;
+  }
+
+  const templateName = typeof payload?.template === "string" ? payload.template.trim().toLowerCase() : "";
+  const language = typeof payload?.language === "string" ? payload.language.trim().toLowerCase() : "en";
+
+  if (!templateName) {
+    return "";
+  }
+
+  return smsTemplates[templateName]?.[language] ?? "";
+}
+
 function loadEnvFile(filePath) {
   if (!existsSync(filePath)) {
     return;
