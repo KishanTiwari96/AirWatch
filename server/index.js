@@ -6,10 +6,20 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const distDir = path.join(rootDir, "dist");
+const viteDevPort = 5173;
+const fallbackApiPort = 8787;
 
 loadEnvFile(path.join(rootDir, ".env"));
 
-const port = Number(process.env.PORT || 8787);
+const requestedPort = Number(
+  process.env.SERVER_PORT?.trim() || process.env.API_PORT?.trim() || process.env.PORT?.trim() || fallbackApiPort,
+);
+const port =
+  requestedPort === viteDevPort
+    ? fallbackApiPort
+    : Number.isFinite(requestedPort) && requestedPort > 0
+      ? requestedPort
+      : fallbackApiPort;
 const waqiToken = process.env.WAQI_API_TOKEN?.trim() || "";
 const defaultCities = parseCities(process.env.CITY_LIST) || [];
 const smsTemplates = {
@@ -431,5 +441,10 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, () => {
+  if (requestedPort === viteDevPort) {
+    console.warn(
+      "Ignoring port 5173 for the API server to avoid colliding with Vite. Using port 8787 instead.",
+    );
+  }
   console.log(`AirWatch server listening on http://localhost:${port}`);
 });

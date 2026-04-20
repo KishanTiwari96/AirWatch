@@ -25,7 +25,7 @@ AirWatch is a React + JavaScript AQI dashboard that:
 2. Copy `.env.example` to `.env` and fill in the values:
 
    ```env
-   PORT=8787
+   SERVER_PORT=8787
    WAQI_API_TOKEN=your_waqi_token
    CITY_LIST=
    TWILIO_ACCOUNT_SID=your_twilio_sid
@@ -37,22 +37,26 @@ AirWatch is a React + JavaScript AQI dashboard that:
 3. Start both frontend and backend together:
 
    ```bash
-   npm run dev:all
+   npm run dev
    ```
 
-4. If you prefer separate terminals, start the backend first:
+4. `npm run dev:all` also works and does the same thing.
+
+5. If you prefer separate terminals, start the backend first:
 
    ```bash
    npm run server
    ```
 
-5. In another terminal, start the React frontend:
+6. In another terminal, start the React frontend:
 
    ```bash
-   npm run dev
+   npm run dev:client
    ```
 
-6. Open the local Vite URL, search for the cities you want to track, allow browser geolocation, and set your phone number in E.164 format such as `+15551234567`.
+7. Open the local Vite URL, search for the cities you want to track, allow browser geolocation, and set your phone number in E.164 format such as `+15551234567`.
+
+If you already have `PORT=5173` in `.env`, either remove it or rename it to `SERVER_PORT=8787` so the API server does not clash with Vite during local development.
 
 ## Production build
 
